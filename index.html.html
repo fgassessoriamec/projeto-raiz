@@ -1,0 +1,690 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Projeto Raiz EBPÓS — Cronograma</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --gold: #C9A84C;
+    --gold-light: #F0D98A;
+    --gold-dim: #8A6D2F;
+    --black: #0F0F0E;
+    --surface: #181816;
+    --card: #1E1E1B;
+    --border: rgba(201,168,76,0.15);
+    --border-strong: rgba(201,168,76,0.35);
+    --text: #E8E4D8;
+    --text-muted: #8A8778;
+    --text-dim: #555449;
+    --green: #3DBF7E;
+    --green-dim: rgba(61,191,126,0.12);
+    --purple: #9B87F5;
+    --purple-dim: rgba(155,135,245,0.12);
+    --amber: #F0A040;
+    --amber-dim: rgba(240,160,64,0.12);
+    --blue: #5BA8E0;
+    --blue-dim: rgba(91,168,224,0.12);
+    --coral: #E07060;
+    --coral-dim: rgba(224,112,96,0.12);
+    --gray: #6B6B65;
+    --gray-dim: rgba(107,107,101,0.12);
+    --font: 'DM Sans', sans-serif;
+    --mono: 'DM Mono', monospace;
+    --radius: 10px;
+    --radius-sm: 6px;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: var(--font);
+    background: var(--black);
+    color: var(--text);
+    min-height: 100vh;
+    padding: 0 0 80px;
+  }
+
+  /* ── HEADER ── */
+  .hero {
+    background: linear-gradient(160deg, #1A1916 0%, #0F0F0E 60%);
+    border-bottom: 1px solid var(--border);
+    padding: 40px 32px 32px;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: -60px; right: -60px;
+    width: 280px; height: 280px;
+    background: radial-gradient(circle, rgba(201,168,76,0.08) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .hero-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(201,168,76,0.1);
+    border: 1px solid var(--border-strong);
+    border-radius: 20px;
+    padding: 4px 12px;
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--gold);
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    margin-bottom: 16px;
+  }
+  .hero h1 {
+    font-size: clamp(22px, 4vw, 32px);
+    font-weight: 600;
+    color: #fff;
+    line-height: 1.2;
+    margin-bottom: 6px;
+  }
+  .hero h1 span { color: var(--gold); }
+  .hero-sub {
+    font-size: 14px;
+    color: var(--text-muted);
+    margin-bottom: 28px;
+  }
+
+  /* ── STATS ── */
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+    max-width: 700px;
+  }
+  @media (max-width: 600px) { .stats-grid { grid-template-columns: repeat(2, 1fr); } }
+  .stat-card {
+    background: rgba(255,255,255,0.03);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 12px 14px;
+  }
+  .stat-label {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--text-dim);
+    margin-bottom: 4px;
+    font-weight: 500;
+  }
+  .stat-value {
+    font-size: 22px;
+    font-weight: 600;
+    color: #fff;
+    font-family: var(--mono);
+  }
+  .stat-unit { font-size: 11px; color: var(--text-muted); margin-left: 3px; font-family: var(--font); font-weight: 400; }
+
+  /* ── PROGRESS ── */
+  .progress-wrap { margin-top: 24px; max-width: 700px; }
+  .progress-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+  .progress-label { font-size: 12px; color: var(--text-muted); }
+  .progress-pct { font-size: 14px; font-weight: 600; color: var(--gold); font-family: var(--mono); }
+  .progress-track {
+    height: 6px;
+    background: rgba(255,255,255,0.06);
+    border-radius: 3px;
+    overflow: hidden;
+  }
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--gold-dim), var(--gold));
+    border-radius: 3px;
+    transition: width 0.5s cubic-bezier(0.4,0,0.2,1);
+  }
+
+  /* ── MAIN CONTENT ── */
+  .content { max-width: 860px; margin: 0 auto; padding: 32px 20px 0; }
+
+  /* ── FILTERS ── */
+  .filters { display: flex; gap: 6px; margin-bottom: 24px; flex-wrap: wrap; }
+  .filter-btn {
+    font-size: 12px;
+    font-family: var(--font);
+    padding: 6px 14px;
+    border-radius: 20px;
+    border: 1px solid var(--border);
+    background: transparent;
+    color: var(--text-muted);
+    cursor: pointer;
+    transition: all .2s;
+    font-weight: 500;
+  }
+  .filter-btn:hover { border-color: var(--border-strong); color: var(--text); }
+  .filter-btn.active { background: rgba(201,168,76,0.12); border-color: var(--border-strong); color: var(--gold); }
+
+  /* ── GANTT ── */
+  .gantt-section { margin-bottom: 32px; }
+  .section-label {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--text-dim);
+    font-weight: 600;
+    margin-bottom: 14px;
+  }
+  .gantt-container { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 16px 20px; }
+  .gantt-header { display: flex; gap: 8px; margin-bottom: 10px; align-items: center; }
+  .gantt-row-label-spacer { width: 160px; flex-shrink: 0; }
+  @media (max-width: 600px) { .gantt-row-label-spacer { width: 90px; } }
+  .gantt-axis { flex: 1; display: flex; justify-content: space-between; }
+  .gantt-axis-tick { font-size: 10px; color: var(--text-dim); font-family: var(--mono); }
+  .gantt-row { display: flex; gap: 8px; align-items: center; margin-bottom: 5px; }
+  .gantt-row-label {
+    width: 160px;
+    flex-shrink: 0;
+    font-size: 11px;
+    color: var(--text-muted);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  @media (max-width: 600px) { .gantt-row-label { width: 90px; font-size: 10px; } }
+  .gantt-track {
+    flex: 1;
+    height: 16px;
+    background: rgba(255,255,255,0.04);
+    border-radius: 3px;
+    position: relative;
+  }
+  .gantt-bar {
+    position: absolute;
+    top: 0; height: 100%;
+    border-radius: 3px;
+    opacity: 0.8;
+    transition: opacity .2s;
+  }
+  .gantt-bar:hover { opacity: 1; }
+
+  /* ── PHASE CARDS ── */
+  .phases-section {}
+  .phase-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    margin-bottom: 8px;
+    overflow: hidden;
+    transition: border-color .2s;
+  }
+  .phase-card:hover { border-color: var(--border-strong); }
+  .phase-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 18px;
+    cursor: pointer;
+    user-select: none;
+  }
+  .phase-dot {
+    width: 9px; height: 9px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+  .phase-title-wrap { flex: 1; }
+  .phase-title { font-size: 14px; font-weight: 500; color: #fff; }
+  .phase-sub { font-size: 11px; color: var(--text-dim); margin-top: 2px; }
+  .phase-meta { display: flex; align-items: center; gap: 10px; }
+  .phase-days {
+    font-size: 11px;
+    font-family: var(--mono);
+    color: var(--text-muted);
+    background: rgba(255,255,255,0.05);
+    padding: 2px 8px;
+    border-radius: 10px;
+  }
+  .phase-prog-ring {
+    width: 30px; height: 30px;
+    flex-shrink: 0;
+  }
+  .phase-chevron { font-size: 10px; color: var(--text-dim); transition: transform .25s; }
+  .phase-chevron.open { transform: rotate(180deg); }
+
+  .phase-body {
+    display: none;
+    border-top: 1px solid var(--border);
+    padding: 4px 0 8px;
+  }
+  .phase-body.open { display: block; }
+
+  /* ── TASKS ── */
+  .task-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 9px 18px;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+    transition: background .15s;
+  }
+  .task-item:last-child { border-bottom: none; }
+  .task-item:hover { background: rgba(255,255,255,0.02); }
+
+  .task-check-wrap { flex-shrink: 0; padding-top: 2px; }
+  .task-check {
+    width: 16px; height: 16px;
+    border-radius: 4px;
+    border: 1px solid var(--text-dim);
+    background: transparent;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all .15s;
+    flex-shrink: 0;
+  }
+  .task-check:hover { border-color: var(--gold); }
+  .task-check.done {
+    background: var(--green);
+    border-color: var(--green);
+  }
+  .task-check.done::after {
+    content: '';
+    display: block;
+    width: 8px; height: 5px;
+    border-left: 1.5px solid #fff;
+    border-bottom: 1.5px solid #fff;
+    transform: rotate(-45deg) translate(1px, -1px);
+  }
+
+  .task-content { flex: 1; min-width: 0; }
+  .task-text {
+    font-size: 13px;
+    color: var(--text);
+    line-height: 1.5;
+    transition: color .15s;
+  }
+  .task-text.done {
+    color: var(--text-dim);
+    text-decoration: line-through;
+    text-decoration-color: var(--text-dim);
+  }
+
+  .task-resp {
+    flex-shrink: 0;
+    font-size: 10px;
+    font-weight: 600;
+    padding: 2px 8px;
+    border-radius: 10px;
+    letter-spacing: 0.03em;
+    align-self: flex-start;
+    margin-top: 2px;
+  }
+  .resp-pc { background: rgba(61,191,126,0.12); color: #3DBF7E; }
+  .resp-lider { background: rgba(155,135,245,0.12); color: #9B87F5; }
+  .resp-dir { background: rgba(240,160,64,0.12); color: #F0A040; }
+  .resp-col { background: rgba(91,168,224,0.12); color: #5BA8E0; }
+
+  /* ── LEGEND ── */
+  .legend { display: flex; gap: 14px; flex-wrap: wrap; margin-top: 24px; }
+  .legend-item { display: flex; align-items: center; gap: 6px; font-size: 11px; color: var(--text-muted); }
+  .legend-dot { width: 8px; height: 8px; border-radius: 50%; }
+
+  /* ── RESET BTN ── */
+  .reset-btn {
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--text-muted);
+    font-family: var(--font);
+    font-size: 12px;
+    padding: 6px 14px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all .2s;
+    margin-top: 24px;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .reset-btn:hover { border-color: var(--coral); color: var(--coral); }
+
+  .footer-note {
+    font-size: 11px;
+    color: var(--text-dim);
+    margin-top: 32px;
+    padding-top: 16px;
+    border-top: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="hero-badge">&#9670; Pessoas &amp; Cultura</div>
+  <h1>Projeto Raiz <span>EBPÓS</span></h1>
+  <div class="hero-sub">Cronograma de apresentação, aprovação e execução do onboarding</div>
+
+  <div class="stats-grid">
+    <div class="stat-card">
+      <div class="stat-label">Duração total</div>
+      <div class="stat-value">~28<span class="stat-unit">dias</span></div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Fases</div>
+      <div class="stat-value">6</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Total de tarefas</div>
+      <div class="stat-value" id="total-tasks">30</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Concluídas</div>
+      <div class="stat-value" id="done-count">0</div>
+    </div>
+  </div>
+
+  <div class="progress-wrap">
+    <div class="progress-top">
+      <span class="progress-label">Progresso geral</span>
+      <span class="progress-pct" id="pct-label">0%</span>
+    </div>
+    <div class="progress-track">
+      <div class="progress-fill" id="progress-fill" style="width:0%"></div>
+    </div>
+  </div>
+</div>
+
+<div class="content">
+
+  <!-- FILTERS -->
+  <div class="filters">
+    <button class="filter-btn active" onclick="filterGroup('all',this)">Todas as fases</button>
+    <button class="filter-btn" onclick="filterGroup('pre',this)">Pré-projeto</button>
+    <button class="filter-btn" onclick="filterGroup('exec',this)">Execução</button>
+    <button class="filter-btn" onclick="filterGroup('post',this)">Pós-onboarding</button>
+  </div>
+
+  <!-- GANTT -->
+  <div class="gantt-section" id="gantt-section">
+    <div class="section-label">Linha do tempo — dias corridos</div>
+    <div class="gantt-container">
+      <div class="gantt-header">
+        <div class="gantt-row-label-spacer"></div>
+        <div class="gantt-axis" id="gantt-axis"></div>
+      </div>
+      <div id="gantt-rows"></div>
+    </div>
+  </div>
+
+  <!-- PHASES -->
+  <div class="section-label">Tarefas por fase</div>
+  <div id="phases-container"></div>
+
+  <!-- LEGEND -->
+  <div class="legend">
+    <div class="legend-item"><div class="legend-dot" style="background:#3DBF7E"></div>Pessoas e Cultura</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#9B87F5"></div>Liderança da área</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#F0A040"></div>Diretoria</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#5BA8E0"></div>Colaborador</div>
+  </div>
+
+  <button class="reset-btn" onclick="resetAll()">&#8635; Reiniciar progresso</button>
+
+  <div class="footer-note">
+    &#128190; Progresso salvo automaticamente no navegador (localStorage).
+  </div>
+</div>
+
+<script>
+const STORAGE_KEY = 'projeto-raiz-checks';
+const TOTAL_DAYS = 28;
+
+const phases = [
+  {
+    id: 'pre', label: 'Pré-projeto', sub: 'Elaboração e preparação da proposta',
+    dot: '#9B87F5', bar: '#9B87F5', start: 0, end: 5,
+    tasks: [
+      { t: 'Elaborar apresentação executiva do Projeto Raiz', r: 'pc' },
+      { t: 'Preparar cronograma e estimativa de impacto (redução de turnover, alinhamento cultural)', r: 'pc' },
+      { t: 'Revisar documento institucional e alinhar com liderança sênior', r: 'pc' },
+      { t: 'Agendar reunião de apresentação com diretoria', r: 'pc' },
+      { t: 'Enviar material de leitura prévia para os diretores', r: 'pc' },
+    ]
+  },
+  {
+    id: 'pre', label: 'Apresentação para diretoria', sub: 'Validação e aprovação do modelo',
+    dot: '#F0A040', bar: '#F0A040', start: 5, end: 7,
+    tasks: [
+      { t: 'Apresentar estrutura do Projeto Raiz (4 fases + objetivos)', r: 'pc' },
+      { t: 'Demonstrar aplicação por área (Comercial, Pedagógico, Atendimento, Financeiro)', r: 'pc' },
+      { t: 'Apresentar indicadores esperados e ROI do onboarding estruturado', r: 'pc' },
+      { t: 'Coletar feedbacks e ajustes solicitados pela diretoria', r: 'dir' },
+      { t: 'Validação e aprovação formal do modelo', r: 'dir' },
+    ]
+  },
+  {
+    id: 'pre', label: 'Ajustes e aprovação final', sub: 'Alinhamento com líderes e lançamento',
+    dot: '#E07060', bar: '#E07060', start: 7, end: 10,
+    tasks: [
+      { t: 'Incorporar ajustes solicitados pela diretoria no documento', r: 'pc' },
+      { t: 'Alinhar com cada liderança de área sobre expectativas e papéis', r: 'pc' },
+      { t: 'Definir calendário de início dos primeiros onboardings', r: 'lider' },
+      { t: 'Preparar materiais de apoio para líderes (guia de condução por fase)', r: 'pc' },
+      { t: 'Aprovação final e comunicado institucional de lançamento do Projeto Raiz', r: 'dir' },
+    ]
+  },
+  {
+    id: 'exec', label: 'Etapa 0 — Preparação', sub: 'Antes da chegada do colaborador',
+    dot: '#3DBF7E', bar: '#3DBF7E', start: 10, end: 12,
+    tasks: [
+      { t: 'Confirmar data oficial de início do colaborador', r: 'pc' },
+      { t: 'Preparar acessos: e-mail, CRM, EDUQ e ferramentas internas', r: 'pc' },
+      { t: 'Informar liderança e agendar momentos da Fase 1', r: 'pc' },
+      { t: 'Alinhar representantes das áreas para a integração', r: 'pc' },
+      { t: 'Enviar cronograma das 2 primeiras semanas ao líder', r: 'pc' },
+    ]
+  },
+  {
+    id: 'exec', label: 'Fases 1–4 — Onboarding', sub: 'Imersão, formação, processos e prática supervisionada',
+    dot: '#5BA8E0', bar: '#5BA8E0', start: 12, end: 26,
+    tasks: [
+      { t: 'Fase 1 (dias 1–3): Imersão cultural, propósito e valores EBPÓS', r: 'pc' },
+      { t: 'Fase 1: Apresentação dos departamentos e jornada do aluno', r: 'lider' },
+      { t: 'Fase 2 (dias 4–6): Formação técnica — produto, mercado e argumentos de valor', r: 'lider' },
+      { t: 'Fase 2: Simulações de conversa e construção do discurso do colaborador', r: 'lider' },
+      { t: 'Fase 3 (dias 7–10): Funil de vendas, CRM, EDUQ e processo operacional', r: 'lider' },
+      { t: 'Fase 3: Indicadores de consolidação — CRM, funil e ligação simulada', r: 'lider' },
+      { t: 'Fase 4 (dias 11–14): Venda assistida com feedback imediato da liderança', r: 'lider' },
+      { t: 'Fase 4: Validação de prontidão e rito de passagem para autonomia', r: 'lider' },
+    ]
+  },
+  {
+    id: 'post', label: 'Pós-onboarding — Avaliação', sub: 'Indicadores, feedback e melhoria contínua',
+    dot: '#6B6B65', bar: '#6B6B65', start: 26, end: 28,
+    tasks: [
+      { t: 'Reunião de fechamento do Projeto Raiz com líder e P&C', r: 'pc' },
+      { t: 'Registro dos indicadores: turnover, discurso, segurança emocional', r: 'pc' },
+      { t: 'Feedback do colaborador sobre a experiência de onboarding', r: 'col' },
+      { t: 'Ajustes no modelo para próximos ciclos', r: 'pc' },
+      { t: 'Relatório final para diretoria', r: 'pc' },
+    ]
+  }
+];
+
+let checks = {};
+
+function loadChecks() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (raw) checks = JSON.parse(raw);
+  } catch(e) { checks = {}; }
+}
+
+function saveChecks() {
+  try { localStorage.setItem(STORAGE_KEY, JSON.stringify(checks)); } catch(e) {}
+}
+
+function getKey(pi, ti) { return `${pi}-${ti}`; }
+
+function respLabel(r) {
+  const map = { pc: 'P&C', lider: 'Lider', dir: 'Dir', col: 'Colab' };
+  return map[r] || r;
+}
+
+function respClass(r) {
+  return `resp-${r}`;
+}
+
+function buildGantt() {
+  const axisEl = document.getElementById('gantt-axis');
+  const ticks = [0,5,10,15,20,25,28];
+  axisEl.innerHTML = ticks.map(t => `<span class="gantt-axis-tick">D${t}</span>`).join('');
+
+  const rowsEl = document.getElementById('gantt-rows');
+  rowsEl.innerHTML = '';
+  phases.forEach((p, pi) => {
+    const row = document.createElement('div');
+    row.className = 'gantt-row';
+    row.dataset.group = p.id;
+    const leftPct = (p.start / TOTAL_DAYS * 100).toFixed(2);
+    const widPct = ((p.end - p.start) / TOTAL_DAYS * 100).toFixed(2);
+    row.innerHTML = `
+      <div class="gantt-row-label" title="${p.label}">${p.label}</div>
+      <div class="gantt-track">
+        <div class="gantt-bar" style="left:${leftPct}%;width:${widPct}%;background:${p.bar}"></div>
+      </div>`;
+    rowsEl.appendChild(row);
+  });
+}
+
+function buildPhases() {
+  const container = document.getElementById('phases-container');
+  container.innerHTML = '';
+
+  phases.forEach((p, pi) => {
+    const card = document.createElement('div');
+    card.className = 'phase-card';
+    card.dataset.group = p.id;
+
+    const doneTasks = p.tasks.filter((_, ti) => checks[getKey(pi, ti)]).length;
+    const total = p.tasks.length;
+    const pct = total ? Math.round(doneTasks / total * 100) : 0;
+    const circ = 2 * Math.PI * 10;
+    const dash = (pct / 100 * circ).toFixed(2);
+
+    const tasksHtml = p.tasks.map((task, ti) => {
+      const key = getKey(pi, ti);
+      const isDone = !!checks[key];
+      return `
+        <div class="task-item">
+          <div class="task-check-wrap">
+            <div class="task-check ${isDone ? 'done' : ''}" onclick="toggleTask('${key}', this, event)"></div>
+          </div>
+          <div class="task-content">
+            <div class="task-text ${isDone ? 'done' : ''}" id="text-${key}">${task.t}</div>
+          </div>
+          <span class="task-resp ${respClass(task.r)}">${respLabel(task.r)}</span>
+        </div>`;
+    }).join('');
+
+    card.innerHTML = `
+      <div class="phase-header" onclick="togglePhase(${pi})">
+        <div class="phase-dot" style="background:${p.dot}"></div>
+        <div class="phase-title-wrap">
+          <div class="phase-title">${p.label}</div>
+          <div class="phase-sub">${p.sub}</div>
+        </div>
+        <div class="phase-meta">
+          <span class="phase-days">D${p.start}–D${p.end}</span>
+          <svg class="phase-prog-ring" viewBox="0 0 24 24">
+            <circle cx="12" cy="12" r="10" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="2"/>
+            <circle cx="12" cy="12" r="10" fill="none" stroke="${p.dot}" stroke-width="2"
+              stroke-dasharray="${dash} ${circ}" stroke-dashoffset="${circ / 4}"
+              stroke-linecap="round" transform="rotate(-90 12 12)"/>
+            <text x="12" y="16" text-anchor="middle" fill="${p.dot}" font-size="6" font-family="DM Mono, monospace" font-weight="500">${pct}%</text>
+          </svg>
+          <span class="phase-chevron" id="chev-${pi}">▼</span>
+        </div>
+      </div>
+      <div class="phase-body" id="body-${pi}">
+        ${tasksHtml}
+      </div>`;
+
+    container.appendChild(card);
+  });
+}
+
+function togglePhase(pi) {
+  const body = document.getElementById(`body-${pi}`);
+  const chev = document.getElementById(`chev-${pi}`);
+  body.classList.toggle('open');
+  chev.classList.toggle('open');
+}
+
+function toggleTask(key, el, e) {
+  e.stopPropagation();
+  checks[key] = !checks[key];
+  saveChecks();
+  el.classList.toggle('done', checks[key]);
+  const textEl = document.getElementById(`text-${key}`);
+  if (textEl) textEl.classList.toggle('done', checks[key]);
+  updateStats();
+  rebuildRings();
+}
+
+function rebuildRings() {
+  phases.forEach((p, pi) => {
+    const doneTasks = p.tasks.filter((_, ti) => checks[getKey(pi, ti)]).length;
+    const total = p.tasks.length;
+    const pct = total ? Math.round(doneTasks / total * 100) : 0;
+    const circ = 2 * Math.PI * 10;
+    const dash = (pct / 100 * circ).toFixed(2);
+    const ring = document.querySelector(`#phases-container .phase-card:nth-child(${pi + 1}) .phase-prog-ring`);
+    if (!ring) return;
+    const arc = ring.querySelectorAll('circle')[1];
+    const txt = ring.querySelector('text');
+    if (arc) arc.setAttribute('stroke-dasharray', `${dash} ${circ}`);
+    if (txt) txt.textContent = `${pct}%`;
+  });
+}
+
+function updateStats() {
+  let total = 0, done = 0;
+  phases.forEach((p, pi) => {
+    p.tasks.forEach((_, ti) => {
+      total++;
+      if (checks[getKey(pi, ti)]) done++;
+    });
+  });
+  const pct = total ? Math.round(done / total * 100) : 0;
+  document.getElementById('total-tasks').textContent = total;
+  document.getElementById('done-count').textContent = done;
+  document.getElementById('pct-label').textContent = pct + '%';
+  document.getElementById('progress-fill').style.width = pct + '%';
+}
+
+function filterGroup(group, btn) {
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  document.querySelectorAll('[data-group]').forEach(el => {
+    if (group === 'all' || el.dataset.group === group) {
+      el.style.display = '';
+    } else {
+      el.style.display = 'none';
+    }
+  });
+}
+
+function resetAll() {
+  if (!confirm('Tem certeza que deseja reiniciar todo o progresso?')) return;
+  checks = {};
+  saveChecks();
+  buildPhases();
+  updateStats();
+}
+
+loadChecks();
+buildGantt();
+buildPhases();
+updateStats();
+</script>
+</body>
+</html>
